@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'raven' => [
+        'dsn'   => env('RAVEN_DSN'),
+        'level' => env('RAVEN_LEVEL', 'error')
+    ],
+
 ];
