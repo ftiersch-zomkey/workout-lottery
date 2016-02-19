@@ -1,0 +1,33 @@
+{
+  "name": "Workout Lottery",
+  "version": "0.0.1",
+  "homepage": "http://www.workout-lottery.com",
+  "main": "app.js",
+  "authors": [
+    "Frank Tiersch"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "requirejs": "*",
+    "pusher": "*",
+    "pusher-angular": "*",
+    "angular": "*",
+    "angular-route": "*",
+    "angular-ui-router": "*",
+    "angular-ui-notification": "*",
+    "angular-sanitize": "*",
+    "angular-file-upload": "*",
+    "angular-material" : "*",
+    "angular-aria" : "*",
+    "angular-animate" : "*",
+    "almond": "*"
+  }
+}
