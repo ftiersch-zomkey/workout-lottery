@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class GroupType
+use Illuminate\Database\Eloquent\Model;
+
+class GroupType extends Model
 {
 
     protected $table = 'group_types';

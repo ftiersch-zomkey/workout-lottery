@@ -23,6 +23,7 @@ class InitialCreation extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->integer('creator_user_id', false, true);
             $table->integer('group_type_id', false, true);
 
             $table->string('name');
@@ -38,6 +39,7 @@ class InitialCreation extends Migration
 
             $table->nullableTimestamps();
 
+            $table->foreign('creator_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('group_type_id')->references('id')->on('groups')->onDelete('cascade');
         });
 
@@ -64,17 +66,17 @@ class InitialCreation extends Migration
 
         Schema::create('groups_exercises', function (Blueprint $table) {
             $table->integer('group_id', false, true);
-            $table->integer('user_id', false, true);
+            $table->integer('exercise_id', false, true);
 
             $table->integer('min_reps', false, true)->default(1);
             $table->integer('max_reps', false, true)->default(1);
 
             $table->nullableTimestamps();
 
-            $table->primary(['group_id', 'user_id']);
+            $table->primary(['group_id', 'exercise_id']);
 
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('exercise_id')->references('id')->on('exercises')->onDelete('cascade');
         });
 
         Schema::create('draws', function (Blueprint $table) {
@@ -101,18 +103,18 @@ class InitialCreation extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        Schema::create('draws_excercises', function (Blueprint $table) {
+        Schema::create('draws_exercises', function (Blueprint $table) {
             $table->integer('draw_id', false, true);
-            $table->integer('excercise_id', false, true);
+            $table->integer('exercise_id', false, true);
 
             $table->smallInteger('reps', false, true);
 
             $table->nullableTimestamps();
 
-            $table->primary(['draw_id', 'excercise_id']);
+            $table->primary(['draw_id', 'exercise_id']);
 
             $table->foreign('draw_id')->references('id')->on('draws')->onDelete('cascade');
-            $table->foreign('excercise_id')->references('id')->on('excercises')->onDelete('cascade');
+            $table->foreign('exercise_id')->references('id')->on('exercises')->onDelete('cascade');
         });
     }
 
@@ -123,6 +125,13 @@ class InitialCreation extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('draws_exercises');
+        Schema::dropIfExists('draws_users');
+        Schema::dropIfExists('draws');
+        Schema::dropIfExists('groups_exercises');
+        Schema::dropIfExists('groups_users');
+        Schema::dropIfExists('exercises');
+        Schema::dropIfExists('groups');
+        Schema::dropIfExists('group_types');
     }
 }

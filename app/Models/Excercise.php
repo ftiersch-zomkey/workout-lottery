@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Excercise
+use Illuminate\Database\Eloquent\Model;
+
+class Excercise extends Model
 {
 
     protected $table = 'excercises';

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Draw
+use Illuminate\Database\Eloquent\Model;
+
+class Draw extends Model
 {
 
     protected $table = 'draws';
