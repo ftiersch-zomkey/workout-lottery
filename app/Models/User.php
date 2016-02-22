@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -30,5 +31,9 @@ class User extends Authenticatable
 
     public function draws() {
         return $this->belongsToMany(\App\Models\Draw::class, 'draws_users')->withPivot('succeeded');
+    }
+
+    public function scopeRandomWinners($query, $count = 1) {
+        $query->orderBy(DB::raw('RAND()'))->take($count);
     }
 }

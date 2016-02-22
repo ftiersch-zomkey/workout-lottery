@@ -53,13 +53,9 @@ class DrawWinnersCommand extends Command
 
         if (!$groupsToDraw->isEmpty()) {
             foreach ($groupsToDraw as $group) {
-
+                $group->drawWinners();
             }
         }
-        // find groups that need to be drawn
-        // - current time is in group's "active period"
-        // - last draw has been longer than the interval
-        // cycle through groups and draw Winners
         // notify winners depending on group type
     }
 }
