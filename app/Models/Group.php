@@ -39,10 +39,15 @@ class Group extends Model
         return $this->hasMany(\App\Models\Draw::class)->orderBy('created_at', 'DESC');
     }
 
+    public function scopeListed($query) {
+        $query->with('group_type')->orderBy('name', 'ASC');
+    }
+
     public static function boot() {
         parent::boot();
 
         self::creating(function ($group) {
+            // automatically add the current user as a creator (if it's not overwritten by something)
             if (empty($group->creator_user_id)) {
                 if (Auth::check()) {
                     $group->creator_user_id = Auth::user()->id;
@@ -50,6 +55,17 @@ class Group extends Model
                     return false;
                 }
             }
+
+            // if no group type is set we just assume default
+            if (empty($group->group_type_id)) {
+                $groupType = GroupType::select('id')->whereName('default')->first();
+                $group->group_type_id = $groupType->id;
+            }
+        });
+
+        self::created(function ($group) {
+            // automatically add the creator to the group
+            $group->users()->attach($group->creator);
         });
     }
 }

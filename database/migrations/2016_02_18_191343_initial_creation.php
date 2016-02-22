@@ -33,9 +33,8 @@ class InitialCreation extends Migration
             $table->time('interval_time_end', false, true)->default('20:00:00');
 
             $table->smallInteger('number_of_winners', false, true)->default(1);
-            $table->tinyInteger('number_of_winners_is_percent', false, true)->default(0);
 
-            $table->smallInteger('finish_excercise_time')->default(25);
+            $table->smallInteger('finish_exercise_time')->default(25);
 
             $table->nullableTimestamps();
 

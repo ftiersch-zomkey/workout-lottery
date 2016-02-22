@@ -1,2 +1,14 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+button {
+  &.md-fab {
+    &.md-floating-fab {
+      position: fixed;
+      z-index: 30;
+      margin: 25px;
 
+      &.md-floating-fab-br {
+        bottom: 0px;
+        right: 0px;
+      }
+    }
+  }
+}

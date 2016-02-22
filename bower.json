@@ -25,9 +25,10 @@
     "angular-ui-notification": "*",
     "angular-sanitize": "*",
     "angular-file-upload": "*",
-    "angular-material" : "*",
-    "angular-aria" : "*",
-    "angular-animate" : "*",
+    "angular-material": "*",
+    "angular-aria": "*",
+    "angular-animate": "*",
+    "ngstorage": "*",
     "almond": "*"
   }
 }
