@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
 class User extends Authenticatable implements AuthenticatableUserContract
@@ -31,6 +32,10 @@ class User extends Authenticatable implements AuthenticatableUserContract
 
     public function draws() {
         return $this->belongsToMany(\App\Models\Draw::class, 'draws_users')->withPivot('succeeded');
+    }
+
+    public function scopeRandomWinners($query, $count = 1) {
+        $query->orderBy(DB::raw('RAND()'))->take($count);
     }
 
     /**

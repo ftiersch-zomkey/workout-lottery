@@ -31,8 +31,8 @@ class Group extends Model
         return $this->belongsToMany(\App\Models\User::class, 'groups_users');
     }
 
-    public function excercises() {
-        return $this->belongsToMany(\App\Models\Excercise::class, 'groups_excercises')->withPivot('min_reps', 'max_reps');
+    public function exercises() {
+        return $this->belongsToMany(\App\Models\Exercise::class, 'groups_exercises')->withPivot('min_reps', 'max_reps');
     }
 
     public function draws() {
@@ -67,5 +67,29 @@ class Group extends Model
             // automatically add the creator to the group
             $group->users()->attach($group->creator);
         });
+    }
+
+    public function drawWinners() {
+        // randomly select the winners for this draw
+        $winners = $this->users()->randomWinners($this->number_of_winners)->get();
+        if ($winners->isEmpty()) {
+            throw new \Exception('No winner found');
+        }
+
+        // randomly select the exercises (including reps) for this draw
+        $exercises = $this->excercises()->random()->get();
+        if ($exercises->isEmpty()) {
+            throw new \Exception('No exercise found');
+        }
+
+        // create a new draw in the database and attach winners and exercises
+        $draw = new Draw([
+            'group_id' => $this->id
+        ]);
+        $draw->users()->sync($winners->pluck('id'));
+
+        foreach ($exercises as $exercise) {
+            $draw->exercises()->attach($exercise, ['reps' => rand($exercise->min_reps, $exercise->max_reps)]);
+        }
     }
 }

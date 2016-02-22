@@ -22,8 +22,8 @@ class Draw extends Model
         return $this->belongsTo(\App\Models\Group::class);
     }
 
-    public function excercises() {
-        return $this->belongsToMany(\App\Models\Excercise::class, 'draws_excercises')->withPivot('reps');
+    public function exercises() {
+        return $this->belongsToMany(\App\Models\Exercise::class, 'draws_exercises')->withPivot('reps');
     }
 
     public function users() {
