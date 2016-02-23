@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:api'], 'prefix' => 'api'], function() {
         Route::get('/own', ['as' => 'api.groups.list.own', 'uses' => 'Api\GroupController@getOwnGroupList']);
         Route::post('/', ['as' => 'api.groups.add', 'uses' => 'Api\GroupController@postAddGroup']);
         Route::put('/{group}', ['as' => 'api.groups.edit', 'uses' => 'Api\GroupController@putEditGroup']);
+        Route::delete('/{group}', ['as' => 'api.groups.delete', 'uses' => 'Api\GroupController@deleteGroup']);
     });
 });
 Route::get('/template/{path}', function ($path) {

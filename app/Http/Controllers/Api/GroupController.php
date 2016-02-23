@@ -43,4 +43,10 @@ class GroupController extends Controller
 
         return response()->json($group);
     }
+
+    public function deleteGroup(Request $request, Group $group) {
+        $group->delete();
+
+        return response()->json($group);
+    }
 }

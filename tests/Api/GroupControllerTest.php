@@ -147,4 +147,17 @@ class GroupControllerTest extends TestCase
 
         $this->seeJsonStructure(['name', 'interval_minutes', 'interval_time_start', 'interval_time_end', 'number_of_winners', 'finish_exercise_time']);
     }
+
+    public function testDeleteGroupDeletesGroupFromDatabase()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->call('DELETE', route('api.groups.delete', ['group' => $this->groups[0]->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->seeJsonStructure(['id', 'name', 'interval_minutes', 'interval_time_start', 'interval_time_end', 'number_of_winners', 'finish_exercise_time']);
+        $this->dontSeeInDatabase('groups', ['id' => $this->groups[0]->id, 'name' => $this->groups[0]->name]);
+        $this->seeInDatabase('groups', ['id' => $this->groups[1]->id, 'name' => $this->groups[1]->name]);
+    }
 }
