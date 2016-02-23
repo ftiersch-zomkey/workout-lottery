@@ -105,4 +105,46 @@ class GroupControllerTest extends TestCase
         $this->assertEquals(422, $response->getStatusCode());
         $this->seeJsonStructure(['name']);
     }
+
+    public function testPutUpdateGroupSavesValidValuesToTheDatabase()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->call('PUT', route('api.groups.edit', ['group' => $this->groups[0]->id]), [
+            'name' => 'Updated Testgroup',
+            'interval_minutes' => 45,
+            'interval_time_start' => '03:00:00',
+            'interval_time_end' => '17:00:00',
+            'number_of_winners' => 1337,
+            'finish_exercise_time' => 30
+        ], [], [], [
+            'HTTP_Accept' => 'application/json'
+        ]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this   ->seeJsonStructure(['id', 'name', 'group_type' => ['name'], 'interval_time_start', 'interval_time_end', 'interval_minutes', 'finish_exercise_time', 'number_of_winners'])
+                ->seeJson(['name' => 'Updated Testgroup', 'interval_time_start' => '03:00:00', 'interval_time_end' => '17:00:00', 'interval_minutes' => 45, 'finish_exercise_time' => 30, 'number_of_winners' => 1337])
+                ->seeInDatabase('groups', ['name' => 'Updated Testgroup', 'interval_minutes' => 45, 'interval_time_start' => '03:00:00', 'interval_time_end' => '17:00:00', 'number_of_winners' => 1337, 'finish_exercise_time' => 30]);
+    }
+
+    public function testPutUpdateGroupGetsValidatedForWrongData()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->call('PUT', route('api.groups.edit', ['group' => $this->groups[0]->id]), [
+            'name' => '',
+            'interval_minutes' => 'test',
+            'interval_time_start' => '00-00-00',
+            'interval_time_end' => '18-00-00',
+            'number_of_winners' => 'test',
+            'finish_exercise_time' => 'test'
+        ], [], [], [
+            'HTTP_Accept' => 'application/json'
+        ]);
+
+        $this->assertEquals(422, $response->getStatusCode());
+
+        $this->seeJsonStructure(['name', 'interval_minutes', 'interval_time_start', 'interval_time_end', 'number_of_winners', 'finish_exercise_time']);
+    }
 }
