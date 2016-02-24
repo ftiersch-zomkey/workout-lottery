@@ -1,19 +1,27 @@
 define(['angular'], function (angular) {
-    function wlGroupsController($scope, $state, Notification, $http, urls) {
+    function wlGroupsController($scope, $state, Notification, $http, urls, wlGroupsDataService) {
+        $scope.ownGroups = [];
+
         $scope.addGroup = addGroup;
 
         function addGroup() {
             console.log('test');
         }
 
-        function activate() {
+        function loadOwnGroups() {
+            wlGroupsDataService.getOwnGroups().then(function (groups) {
+                $scope.ownGroups = groups;
+            });
+        }
 
+        function activate() {
+            loadOwnGroups();
         }
 
         activate();
     }
 
-    wlGroupsController.$inject = ['$scope', '$state', 'Notification', '$http', 'urls'];
+    wlGroupsController.$inject = ['$scope', '$state', 'Notification', '$http', 'urls', 'wlGroupsDataService'];
 
     return wlGroupsController;
 });

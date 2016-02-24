@@ -29,6 +29,7 @@
     "angular-aria": "*",
     "angular-animate": "*",
     "ngstorage": "*",
-    "almond": "*"
+    "almond": "*",
+    "raven-js": "*"
   }
 }

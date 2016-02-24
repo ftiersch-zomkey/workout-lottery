@@ -4,6 +4,7 @@ define([
     'controllers/SignInController',
     'controllers/DashboardController',
     'controllers/GroupsController',
+    'services/GroupsDataService',
     'services/ApplicationPusherService',
     'pusher-angular',
     'angular-ui-router',
@@ -11,16 +12,18 @@ define([
     'angular-storage',
     'angular-aria',
     'angular-animate',
-    'angular-material'
+    'angular-material',
+    'raven-js-angular'
 ], function (
     Pusher,
     angular,
     wlSignInController,
     wlDashboardController,
     wlGroupsController,
+    wlGroupsDataService,
     wlApplicationPusherService
 ) {
-    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage'])
+    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage', 'ngRaven'])
 
     // set constants for easy to change base URLs
     .constant('urls', {
@@ -122,6 +125,7 @@ define([
     }])
 
     .factory('wlApplicationPusherService', wlApplicationPusherService)
+    .factory('wlGroupsDataService', wlGroupsDataService)
 
     .factory('Auth', ['$http', '$localStorage', 'urls', function ($http, $localStorage, urls) {
         function urlBase64Decode(str) {

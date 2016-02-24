@@ -13,7 +13,9 @@ require.config({
         "angular-storage": "../libs/ngStorage/ngStorage.min",
         "angular-aria": "../libs/angular-aria/angular-aria.min",
         "angular-animate": "../libs/angular-animate/angular-animate.min",
-        "angular-material": "../libs/angular-material/angular-material.min"
+        "angular-material": "../libs/angular-material/angular-material.min",
+        "raven-js": "../libs/raven-js/dist/raven.min",
+        "raven-js-angular": "../libs/raven-js/dist/plugins/angular"
     },
     shim: {
         jquery: {
@@ -31,10 +33,12 @@ require.config({
         "angular-aria": ['angular'],
         "angular-animate": ['angular'],
         "angular-material": ['angular', 'angular-aria', 'angular-animate'],
-        "pusher-angular": ['angular']
+        "pusher-angular": ['angular'],
+        "raven-js-angular": ['angular', 'raven-js']
     }
 });
 
-requirejs(['jquery', 'modules/ApplicationModule'], function ($) {
+requirejs(['jquery', 'raven-js', 'angular', 'modules/ApplicationModule'], function ($, Raven, angular) {
+    Raven.config('https://8349a55a6f834efba8ce56bd640c272c@app.getsentry.com/67629').install();
     angular.bootstrap(document, ['wlApplication']);
 });
