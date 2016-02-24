@@ -16,7 +16,7 @@ class Group extends Model
      * @var array
      */
     protected $fillable = [
-        'creator_user_id', 'group_type_id', 'name', 'interval_minutes', 'interval_time_start', 'interval_time_end', 'number_of_winners', 'number_of_winners_is_percent', 'finish_exercise_time'
+        'creator_user_id', 'group_type_id', 'name', 'interval_minutes', 'interval_time_start', 'interval_time_end', 'number_of_winners', 'finish_exercise_time'
     ];
 
     public function creator() {
@@ -36,9 +36,14 @@ class Group extends Model
     }
 
     public function draws() {
-        return $this->hasMany(\App\Models\Draw::class)->orderBy('created_at', 'DESC');
+        return $this->hasMany(\App\Models\Draw::class)->listed();
     }
 
+    /**
+     * Standard parameters for a query that lists groups (like "My groups")
+     *
+     * @param $query
+     */
     public function scopeListed($query) {
         $query->with('group_type')->orderBy('name', 'ASC');
     }

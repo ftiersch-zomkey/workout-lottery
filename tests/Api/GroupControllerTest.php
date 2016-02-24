@@ -160,4 +160,39 @@ class GroupControllerTest extends TestCase
         $this->dontSeeInDatabase('groups', ['id' => $this->groups[0]->id, 'name' => $this->groups[0]->name]);
         $this->seeInDatabase('groups', ['id' => $this->groups[1]->id, 'name' => $this->groups[1]->name]);
     }
+
+    public function testListGroupDrawsListsAllDrawsForSelectedGroup()
+    {
+        $this->actingAs($this->user);
+
+        $draw1 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[0]->id]);
+        $draw2 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[0]->id]);
+        $draw3 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[0]->id]);
+
+        $response = $this->call('GET', route('api.groups.draws.list', ['group' => $this->groups[0]->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->seeJsonStructure(['0' => ['id', 'users', 'exercises'], '1' => ['id', 'users', 'exercises'], '2' => ['id', 'users', 'exercises']]);
+    }
+
+    public function testListGroupDrawsOnlyListsDrawsForSelectedGroups()
+    {
+        $this->actingAs($this->user);
+
+        $draw1 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[0]->id]);
+        $draw2 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[0]->id]);
+        $draw3 = factory(\App\Models\Draw::class)->create(['group_id' => $this->groups[1]->id]);
+
+        $response = $this->call('GET', route('api.groups.draws.list', ['group' => $this->groups[0]->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->seeJsonStructure(['0' => ['id', 'users', 'exercises'], '1' => ['id', 'users', 'exercises']]);
+
+        $result = json_decode($response->getContent());
+
+        $this->assertNotEquals(false, $result);
+        $this->assertEquals(2, count($result));
+    }
 }

@@ -36,3 +36,8 @@ $factory->define(\App\Models\Group::class, function (\Faker\Generator $faker) {
         'finish_exercise_time' => 25
     ];
 });
+
+$factory->define(\App\Models\Draw::class, function (\Faker\Generator $faker) {
+    return [
+    ];
+});

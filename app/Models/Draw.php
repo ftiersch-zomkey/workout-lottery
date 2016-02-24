@@ -29,4 +29,8 @@ class Draw extends Model
     public function users() {
         return $this->belongsToMany(\App\Models\User::class, 'draws_users')->withPivot('succeeded');
     }
+
+    public function scopeListed($query) {
+        $query->with('group', 'exercises', 'users')->orderBy('created_at', 'DESC');
+    }
 }

@@ -49,4 +49,10 @@ class GroupController extends Controller
 
         return response()->json($group);
     }
+
+    public function listGroupDraws(Request $request, Group $group) {
+        $draws = $group->draws;
+
+        return response()->json($draws);
+    }
 }
