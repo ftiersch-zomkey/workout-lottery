@@ -28,6 +28,7 @@
     "angular-material": "*",
     "angular-aria": "*",
     "angular-animate": "*",
+    "angular-moment": "1.*",
     "ngstorage": "*",
     "almond": "*",
     "raven-js": "*"

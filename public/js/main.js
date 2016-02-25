@@ -3,6 +3,7 @@ require.config({
     paths: {
         "jquery": '../libs/jquery/dist/jquery',
         "pusher": '../libs/pusher/dist/pusher',
+        "moment": '../libs/moment/min/moment.min',
         "pusher-angular": '../libs/pusher-angular/lib/pusher-angular',
         "angular": '../libs/angular/angular',
         "angular-ui-router": '../libs/angular-ui-router/release/angular-ui-router',
@@ -14,6 +15,7 @@ require.config({
         "angular-aria": "../libs/angular-aria/angular-aria.min",
         "angular-animate": "../libs/angular-animate/angular-animate.min",
         "angular-material": "../libs/angular-material/angular-material.min",
+        "angular-moment": "../libs/angular-moment/angular-moment.min",
         "raven-js": "../libs/raven-js/dist/raven.min",
         "raven-js-angular": "../libs/raven-js/dist/plugins/angular.min"
     },
@@ -33,6 +35,7 @@ require.config({
         "angular-aria": ['angular'],
         "angular-animate": ['angular'],
         "angular-material": ['angular', 'angular-aria', 'angular-animate'],
+        "angular-moment": ['angular', 'moment'],
         "pusher-angular": ['angular'],
         "raven-js-angular": ['angular', 'raven-js']
     }

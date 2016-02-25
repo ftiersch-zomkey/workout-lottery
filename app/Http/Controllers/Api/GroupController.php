@@ -41,7 +41,7 @@ class GroupController extends Controller
     }
 
     public function getDetailedGroup(Request $request, Group $group) {
-        $group->load('group_type');
+        $group->load('group_type', 'users', 'exercises', 'draws', 'draws.users');
 
         return response()->json($group);
     }

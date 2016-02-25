@@ -14,6 +14,7 @@ define([
     'angular-aria',
     'angular-animate',
     'angular-material',
+    'angular-moment',
     'raven-js-angular'
 ], function (
     Pusher,
@@ -25,13 +26,27 @@ define([
     wlGroupsDataService,
     wlApplicationPusherService
 ) {
-    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage'])
+    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage', 'angularMoment'])
 
     // set constants for easy to change base URLs
     .constant('urls', {
         BASE: 'http://www.workout-lottery.local',
         BASE_API: 'http://www.workout-lottery.local/api',
         BASE_TEMPLATES: 'http://www.workout-lottery.local/template'
+    })
+
+    .filter('reduce', function() {
+        return function (array, field, delimiter) {
+            delimiter = delimiter || ", ";
+
+            if (array.length > 0) {
+                return array.reduce(function (prev, current, index, arr) {
+                    return prev[field] + delimiter + current[field];
+                });
+            } else {
+                return '';
+            }
+        };
     })
 
     // automatically add CSRF Token to AJAX calls

@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['middleware' => ['auth:api']], function() {
         Route::group(['prefix' => 'groups'], function() {
             Route::get('/', ['as' => 'api.groups.list', 'uses' => 'Api\GroupController@getGroupList']);
-            Route::get('/{group}', ['as' => 'api.groups.detailed', 'uses' => 'Api\GroupController@getDetailedGroup']);
+            Route::get('/{group}', ['as' => 'api.groups.detailed', 'uses' => 'Api\GroupController@getDetailedGroup'])->where('group', '[0-9]+');
             Route::post('/', ['as' => 'api.groups.add', 'uses' => 'Api\GroupController@postAddGroup']);
             Route::put('/{group}', ['as' => 'api.groups.edit', 'uses' => 'Api\GroupController@putEditGroup']);
             Route::delete('/{group}', ['as' => 'api.groups.delete', 'uses' => 'Api\GroupController@deleteGroup']);
