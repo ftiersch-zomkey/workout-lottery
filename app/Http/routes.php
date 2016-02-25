@@ -32,6 +32,10 @@ Route::group(['prefix' => 'api'], function() {
             Route::post('/{group}/users/{user}', ['as' => 'api.groups.users.add', 'uses' => 'Api\GroupController@addGroupUser']);
             Route::delete('/{group}/users/{user}', ['as' => 'api.groups.users.remove', 'uses' => 'Api\GroupController@removeGroupUser']);
         });
+
+        Route::group(['prefix' => 'draws'], function() {
+            Route::put('/{draw}/succeeded/{user}', ['as' => 'api.draws.succeeded', 'uses' => 'Api\DrawController@putMarkDrawSucceeded']);
+        });
     });
 
     Route::group(['prefix' => 'hipchat'], function() {
