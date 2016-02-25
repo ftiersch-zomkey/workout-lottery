@@ -1,6 +1,7 @@
 define(['angular'], function (angular) {
-    function wlGroupsEditController($scope, $state, $stateParams, Notification, $http, urls, wlGroupsDataService) {
+    function wlGroupsEditController($scope, $state, $stateParams, Notification, $http, urls, Auth, wlGroupsDataService) {
         $scope.group = {};
+        $scope.loggedInUser = Auth.user;
 
         function loadGroup() {
             wlGroupsDataService.getSingleGroup($stateParams.group_id).then(function (group) {
@@ -18,7 +19,7 @@ define(['angular'], function (angular) {
         activate();
     }
 
-    wlGroupsEditController.$inject = ['$scope', '$state', '$stateParams', 'Notification', '$http', 'urls', 'wlGroupsDataService'];
+    wlGroupsEditController.$inject = ['$scope', '$state', '$stateParams', 'Notification', '$http', 'urls', 'Auth', 'wlGroupsDataService'];
 
     return wlGroupsEditController;
 });

@@ -189,9 +189,12 @@ define([
                 $http.post(urls.BASE + '/signup', data).success(success).error(error)
             },
             signin: function (data, success, error) {
+                var self = this;
+
                 $http.post(urls.BASE + '/auth', data).success(function(res) {
                     $localStorage.token = res.token;
                     isSignedIn = true;
+                    self.user = res.user;
                     success(res);
                 }).error(error)
             },
