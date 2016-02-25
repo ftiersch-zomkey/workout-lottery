@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Groups\AddGroupRequest;
+use App\Http\Requests\Api\Groups\RemoveGroupUserRequest;
 use App\Http\Requests\Api\Groups\UpdateGroupRequest;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,5 +56,23 @@ class GroupController extends Controller
         $draws = $group->draws;
 
         return response()->json($draws);
+    }
+
+    public function listGroupUsers(Request $request, Group $group) {
+        $users = $group->users;
+
+        return response()->json($users);
+    }
+
+    public function addGroupUser(Request $request, Group $group, User $user) {
+        $group->users()->attach($user->id);
+
+        return response()->json([]);
+    }
+
+    public function removeGroupUser(RemoveGroupUserRequest $request, Group $group, User $user) {
+        $group->users()->detach($user->id);
+
+        return response()->json([]);
     }
 }

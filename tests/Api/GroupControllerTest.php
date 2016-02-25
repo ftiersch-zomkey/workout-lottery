@@ -173,7 +173,12 @@ class GroupControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $this->seeJsonStructure(['0' => ['id', 'users', 'exercises'], '1' => ['id', 'users', 'exercises'], '2' => ['id', 'users', 'exercises']]);
+        $this->seeJsonStructure(['*' => ['id', 'users', 'exercises']]);
+
+        $result = json_decode($response->getContent());
+
+        $this->assertNotEquals(false, $result);
+        $this->assertEquals(3, count($result));
     }
 
     public function testListGroupDrawsOnlyListsDrawsForSelectedGroups()
@@ -188,11 +193,108 @@ class GroupControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
 
-        $this->seeJsonStructure(['0' => ['id', 'users', 'exercises'], '1' => ['id', 'users', 'exercises']]);
+        $this->seeJsonStructure(['*' => ['id', 'users', 'exercises']]);
 
         $result = json_decode($response->getContent());
 
         $this->assertNotEquals(false, $result);
         $this->assertEquals(2, count($result));
+    }
+
+    public function testListGroupUsersListsAllUsersForSelectedGroup()
+    {
+        $this->actingAs($this->user);
+
+        $user1 = factory(\App\Models\User::class)->create(['email' => 'test1@test.de']);
+        $user2 = factory(\App\Models\User::class)->create(['email' => 'test2@test.de']);
+        $user3 = factory(\App\Models\User::class)->create(['email' => 'test3@test.de']);
+
+        $this->groups[0]->users()->attach($user1->id);
+        $this->groups[0]->users()->attach($user2->id);
+        $this->groups[0]->users()->attach($user3->id);
+
+        $response = $this->call('GET', route('api.groups.users.list', ['group' => $this->groups[0]->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this   ->seeJsonStructure(['*' => ['id', 'email']])
+                ->seeJson(['email' => 'test1@test.de'])
+                ->seeJson(['email' => 'test2@test.de'])
+                ->seeJson(['email' => 'test2@test.de']);
+
+        $result = json_decode($response->getContent());
+
+        $this->assertNotEquals(false, $result);
+        // 4 because the creator of a group is automatically also a member
+        $this->assertEquals(4, count($result));
+    }
+
+    public function testListGroupUsersListsOnlyUsersForSelectedGroup()
+    {
+        $this->actingAs($this->user);
+
+        $user1 = factory(\App\Models\User::class)->create(['email' => 'test1@test.de']);
+        $user2 = factory(\App\Models\User::class)->create(['email' => 'test2@test.de']);
+        $user3 = factory(\App\Models\User::class)->create(['email' => 'test3@test.de']);
+
+        $this->groups[0]->users()->attach($user1->id);
+        $this->groups[1]->users()->attach($user2->id);
+        $this->groups[1]->users()->attach($user3->id);
+
+        $response = $this->call('GET', route('api.groups.users.list', ['group' => $this->groups[0]->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this   ->seeJsonStructure(['*' => ['id', 'email']])
+                ->seeJson(['email' => 'test1@test.de']);
+
+        $result = json_decode($response->getContent());
+
+        $this->assertNotEquals(false, $result);
+        // 2 because the creator of a group is automatically also a member
+        $this->assertEquals(2, count($result));
+    }
+
+    public function testAddGroupUserAddsRelationToDatabase()
+    {
+        $this->actingAs($this->user);
+
+        $user1 = factory(\App\Models\User::class)->create(['email' => 'test1@test.de']);
+
+        $response = $this->call('POST', route('api.groups.users.add', ['group' => $this->groups[0]->id, 'user' => $user1->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->seeInDatabase('groups_users', ['group_id' => $this->groups[0]->id, 'user_id' => $user1->id]);
+    }
+
+    public function testRemoveGroupUserRemovesRelationFromDatabase()
+    {
+        $this->actingAs($this->user);
+
+        $user1 = factory(\App\Models\User::class)->create(['email' => 'test1@test.de']);
+
+        $this->groups[0]->users()->attach($user1->id);
+
+        $response = $this->call('DELETE', route('api.groups.users.remove', ['group' => $this->groups[0]->id, 'user' => $user1->id]));
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->dontSeeInDatabase('groups_users', ['group_id' => $this->groups[0]->id, 'user_id' => $user1->id]);
+    }
+
+    public function testWrongUsersCantRemoveUserFromGroup()
+    {
+        $user1 = factory(\App\Models\User::class)->create(['email' => 'test1@test.de']);
+        $user2 = factory(\App\Models\User::class)->create(['email' => 'test2@test.de']);
+
+        $this->groups[0]->users()->attach($user1->id);
+        $this->groups[0]->users()->attach($user2->id);
+
+        $this->actingAs($user2);
+
+        $response = $this->call('DELETE', route('api.groups.users.remove', ['group' => $this->groups[0]->id, 'user' => $user1->id]));
+
+        $this->assertEquals(403, $response->getStatusCode());
     }
 }

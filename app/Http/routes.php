@@ -28,6 +28,9 @@ Route::group(['prefix' => 'api'], function() {
             Route::delete('/{group}', ['as' => 'api.groups.delete', 'uses' => 'Api\GroupController@deleteGroup']);
 
             Route::get('/{group}/draws', ['as' => 'api.groups.draws.list', 'uses' => 'Api\GroupController@listGroupDraws']);
+            Route::get('/{group}/users', ['as' => 'api.groups.users.list', 'uses' => 'Api\GroupController@listGroupUsers']);
+            Route::post('/{group}/users/{user}', ['as' => 'api.groups.users.add', 'uses' => 'Api\GroupController@addGroupUser']);
+            Route::delete('/{group}/users/{user}', ['as' => 'api.groups.users.remove', 'uses' => 'Api\GroupController@removeGroupUser']);
         });
     });
 
