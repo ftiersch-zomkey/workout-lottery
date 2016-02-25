@@ -22,10 +22,12 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['middleware' => ['auth:api']], function() {
         Route::group(['prefix' => 'groups'], function() {
             Route::get('/', ['as' => 'api.groups.list', 'uses' => 'Api\GroupController@getGroupList']);
-            Route::get('/own', ['as' => 'api.groups.list.own', 'uses' => 'Api\GroupController@getOwnGroupList']);
+            Route::get('/{group}', ['as' => 'api.groups.detailed', 'uses' => 'Api\GroupController@getDetailedGroup']);
             Route::post('/', ['as' => 'api.groups.add', 'uses' => 'Api\GroupController@postAddGroup']);
             Route::put('/{group}', ['as' => 'api.groups.edit', 'uses' => 'Api\GroupController@putEditGroup']);
             Route::delete('/{group}', ['as' => 'api.groups.delete', 'uses' => 'Api\GroupController@deleteGroup']);
+
+            Route::get('/own', ['as' => 'api.groups.list.own', 'uses' => 'Api\GroupController@getOwnGroupList']);
 
             Route::get('/{group}/draws', ['as' => 'api.groups.draws.list', 'uses' => 'Api\GroupController@listGroupDraws']);
             Route::get('/{group}/users', ['as' => 'api.groups.users.list', 'uses' => 'Api\GroupController@listGroupUsers']);

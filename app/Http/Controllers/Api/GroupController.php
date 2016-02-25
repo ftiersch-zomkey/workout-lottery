@@ -40,6 +40,12 @@ class GroupController extends Controller
         return response()->json($groups);
     }
 
+    public function getDetailedGroup(Request $request, Group $group) {
+        $group->load('group_type');
+
+        return response()->json($group);
+    }
+
     /**
      * Create a new group
      *

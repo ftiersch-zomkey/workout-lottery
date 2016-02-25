@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ExcerciseTableSeeder extends Seeder
+class ExerciseTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class ExcerciseTableSeeder extends Seeder
         $exercises = ['Push-Up', 'Pull-Up', 'Squat', 'Sit-Up', 'Crunch'];
 
         foreach ($exercises as $exercise) {
-            if (\App\Models\Excercise::whereName($exercise)->count() == 0) {
-                \App\Models\Excercise::create([
+            if (\App\Models\Exercise::whereName($exercise)->count() == 0) {
+                \App\Models\Exercise::create([
                     'name' => $exercise
                 ]);
             }

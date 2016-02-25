@@ -1,6 +1,6 @@
 define(['angular'], function (angular) {
     function wlGroupsController($scope, $state, Notification, $http, urls, wlGroupsDataService) {
-        $scope.ownGroups = [];
+        $scope.ownGroups = {};
 
         $scope.addGroup = addGroup;
 
@@ -11,6 +11,7 @@ define(['angular'], function (angular) {
         function loadOwnGroups() {
             wlGroupsDataService.getOwnGroups().then(function (groups) {
                 $scope.ownGroups = groups;
+                $scope.$apply();
             });
         }
 

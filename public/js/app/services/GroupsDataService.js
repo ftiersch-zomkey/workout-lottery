@@ -18,6 +18,17 @@ define(['angular'], function (angular) {
                         resolve(self.ownGroups);
                     }
                 });
+            },
+            getSingleGroup : function (groupId) {
+                var self = this;
+
+                return new Promise(function (resolve, reject) {
+                    $http.get(urls.BASE_API + '/groups/' + groupId).then(function (group) {
+                        resolve(group.data);
+                    }, function (errors) {
+                        reject(errors.data);
+                    })
+                });
             }
         }
 

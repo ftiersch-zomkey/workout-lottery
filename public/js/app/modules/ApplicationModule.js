@@ -4,6 +4,7 @@ define([
     'controllers/SignInController',
     'controllers/DashboardController',
     'controllers/GroupsController',
+    'controllers/GroupsEditController',
     'services/GroupsDataService',
     'services/ApplicationPusherService',
     'pusher-angular',
@@ -20,10 +21,11 @@ define([
     wlSignInController,
     wlDashboardController,
     wlGroupsController,
+    wlGroupsEditController,
     wlGroupsDataService,
     wlApplicationPusherService
 ) {
-    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage', 'ngRaven'])
+    var wlApplication = angular.module('wlApplication', ['ui.router', 'ui-notification', 'pusher-angular', 'ngAria', 'ngAnimate', 'ngMaterial', 'ngStorage'])
 
     // set constants for easy to change base URLs
     .constant('urls', {
@@ -94,6 +96,15 @@ define([
                     "content@": {
                         templateUrl: urls.BASE_TEMPLATES + '/groups',
                         controller: 'wlGroupsController'
+                    }
+                }
+            })
+            .state('restricted.groups.edit', {
+                url: "/edit/:group_id",
+                views: {
+                    "content@": {
+                        templateUrl: urls.BASE_TEMPLATES + '/groups-edit',
+                        controller: 'wlGroupsEditController'
                     }
                 }
             })
@@ -187,6 +198,7 @@ define([
     .controller('wlSignInController', wlSignInController)
     .controller('wlDashboardController', wlDashboardController)
     .controller('wlGroupsController', wlGroupsController)
+    .controller('wlGroupsEditController', wlGroupsEditController)
     .controller('wlNavigationController', ['$scope', '$mdSidenav', 'Auth', function ($scope, $mdSidenav, Auth) {
         $scope.toggleNav = function() {
             $mdSidenav('left').toggle();

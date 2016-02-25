@@ -15,7 +15,7 @@ require.config({
         "angular-animate": "../libs/angular-animate/angular-animate.min",
         "angular-material": "../libs/angular-material/angular-material.min",
         "raven-js": "../libs/raven-js/dist/raven.min",
-        "raven-js-angular": "../libs/raven-js/dist/plugins/angular"
+        "raven-js-angular": "../libs/raven-js/dist/plugins/angular.min"
     },
     shim: {
         jquery: {
