@@ -16,7 +16,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/app', ['as' => 'app.home', 'uses' => 'AppController@getIndex']);
 });
 
-Route::post('/auth', ['uses' => 'Auth\AuthController@login']);
+Route::post('/auth/login', ['uses' => 'Auth\AuthController@login']);
 Route::get('logout', ['uses' => 'Auth\AuthController@logout']);
 Route::group(['prefix' => 'api'], function() {
     Route::group(['middleware' => ['auth:api']], function() {

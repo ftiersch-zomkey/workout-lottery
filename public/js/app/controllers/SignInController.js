@@ -1,5 +1,5 @@
 define(['angular'], function (angular) {
-    function wlSignInController($scope, $state, Notification, Auth, $localStorage) {
+    function wlSignInController($scope, $state, Notification, $auth) {
         $scope.signInData = {
             email : null,
             password : null
@@ -8,17 +8,15 @@ define(['angular'], function (angular) {
         $scope.signIn = signIn;
 
         function signIn() {
-            Auth.signin($scope.signInData, successAuth, function () {
+            $auth.login($scope.signInData).then(function (response) {
+                $state.go('restricted.dashboard');
+            }).catch(function (response) {
                 Notification.error('Invalid credentials.');
             });
         }
 
-        function successAuth(res) {
-            $state.go('restricted.dashboard');
-        }
-
         function activate() {
-            if ($localStorage.token) {
+            if ($auth.isAuthenticated()) {
                 $state.go('restricted.dashboard');
             }
         }
@@ -26,7 +24,7 @@ define(['angular'], function (angular) {
         activate();
     }
 
-    wlSignInController.$inject = ['$scope', '$state', 'Notification', 'Auth', '$localStorage'];
+    wlSignInController.$inject = ['$scope', '$state', 'Notification', '$auth'];
 
     return wlSignInController;
 });

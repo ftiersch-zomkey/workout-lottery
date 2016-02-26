@@ -17,7 +17,8 @@ require.config({
         "angular-material": "../libs/angular-material/angular-material.min",
         "angular-moment": "../libs/angular-moment/angular-moment.min",
         "raven-js": "../libs/raven-js/dist/raven.min",
-        "raven-js-angular": "../libs/raven-js/dist/plugins/angular.min"
+        "raven-js-angular": "../libs/raven-js/dist/plugins/angular.min",
+        "satellizer" : "../libs/satellizer/satellizer.min"
     },
     shim: {
         jquery: {
@@ -37,7 +38,8 @@ require.config({
         "angular-material": ['angular', 'angular-aria', 'angular-animate'],
         "angular-moment": ['angular', 'moment'],
         "pusher-angular": ['angular'],
-        "raven-js-angular": ['angular', 'raven-js']
+        "raven-js-angular": ['angular', 'raven-js'],
+        "satellizer": ['angular']
     }
 });
 
