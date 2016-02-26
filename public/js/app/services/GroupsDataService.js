@@ -71,8 +71,8 @@ define(['angular'], function (angular) {
                         });
                         resolve(result.data);
                     }, function (errors) {
-                        reject(result.data);
-                    })
+                        reject(errors.data);
+                    });
                 });
             }
         }

@@ -19,7 +19,9 @@ define(['angular'], function (angular) {
         function markDrawAsSucceeded(draw) {
             wlGroupsDataService.markDrawAsSucceeded(draw, $scope.currentUser).then(function() {
                 $scope.$apply();
-            })
+            }, function (errors) {
+                Notification.error(errors.error);
+            });
         }
 
         function removeUserFromGroup(user, ev) {

@@ -12,6 +12,11 @@ class DrawController extends Controller
         if (!$user) {
             $user = Auth::user();
         }
+
+        if (!$draw->canStillSucceed) {
+            return response()->json(['error' => 'Timelimit for this exercise has passed'], 422);
+        }
+
         $draw->users()->updateExistingPivot($user->id, ['succeeded' => 1]);
 
         return response()->json([]);

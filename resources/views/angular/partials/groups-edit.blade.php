@@ -13,7 +13,7 @@
                         </span>
                     </h3>
                     <p am-time-ago="draw.created_at | amParse:'YYYY-MM-DD HH:mm:ss'"></p>
-                    <md-icon md-font-set="material-icons" class="md-secondary" ng-click="markDrawAsSucceeded(draw)" ng-if="!userFinishedDraw(draw)">check</md-icon>
+                    <md-icon md-font-set="material-icons" class="md-secondary" ng-click="markDrawAsSucceeded(draw)" ng-if="!userFinishedDraw(draw) && draw.can_still_succeed">check</md-icon>
                 </div>
             </md-list-item>
         </md-list>
