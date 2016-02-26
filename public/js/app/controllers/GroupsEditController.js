@@ -4,6 +4,23 @@ define(['angular'], function (angular) {
         $scope.currentUser = {};
 
         $scope.removeUserFromGroup = removeUserFromGroup;
+        $scope.markDrawAsSucceeded = markDrawAsSucceeded;
+        $scope.userFinishedDraw = userFinishedDraw;
+
+        function userFinishedDraw(draw) {
+            for (var i = 0; i < draw.users.length; i++) {
+                if (draw.users[i].id == $scope.currentUser.id) {
+                    return draw.users[i].pivot.succeeded == 1;
+                }
+            }
+            return false;
+        }
+
+        function markDrawAsSucceeded(draw) {
+            wlGroupsDataService.markDrawAsSucceeded(draw, $scope.currentUser).then(function() {
+                $scope.$apply();
+            })
+        }
 
         function removeUserFromGroup(user, ev) {
             // Appending dialog to document.body to cover sidenav in docs app

@@ -2,6 +2,7 @@ define(['angular'], function (angular) {
     function wlGroupsDataService($http, urls) {
         var service = {
             ownGroups : null,
+            detailedGroups : {},
             getOwnGroups : function (forceReload) {
                 forceReload = forceReload || false;
                 var self = this;
@@ -23,11 +24,16 @@ define(['angular'], function (angular) {
                 var self = this;
 
                 return new Promise(function (resolve, reject) {
-                    $http.get(urls.BASE_API + '/groups/' + groupId).then(function (group) {
-                        resolve(group.data);
-                    }, function (errors) {
-                        reject(errors.data);
-                    })
+                    if (self.detailedGroups[groupId]) {
+                        resolve(self.detailedGroups[groupId]);
+                    } else {
+                        $http.get(urls.BASE_API + '/groups/' + groupId).then(function (group) {
+                            self.detailedGroups[groupId] = group.data;
+                            resolve(group.data);
+                        }, function (errors) {
+                            reject(errors.data);
+                        });
+                    }
                 });
             },
             removeUserFromGroup : function (user, group) {
@@ -44,6 +50,29 @@ define(['angular'], function (angular) {
                     }, function (errors) {
                         reject(errors.data);
                     });
+                });
+            },
+            markDrawAsSucceeded : function (draw, user) {
+                var self = this;
+                return new Promise(function (resolve, reject) {
+                    $http.put(urls.BASE_API + '/draws/' + draw.id + '/succeeded/' + (user ? user.id : '')).then(function (result) {
+                        self.getSingleGroup(draw.group_id).then(function (group) {
+                            for (var i = 0; i < group.draws.length; i++) {
+                                if (group.draws[i].id == draw.id) {
+                                    for (var j = 0; j < group.draws[i].users.length; j++) {
+                                        if (group.draws[i].users[j].id == user.id) {
+                                            group.draws[i].users[j].pivot.succeeded = 1;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        });
+                        resolve(result.data);
+                    }, function (errors) {
+                        reject(result.data);
+                    })
                 });
             }
         }

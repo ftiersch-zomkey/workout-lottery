@@ -36,7 +36,7 @@ Route::group(['prefix' => 'api'], function() {
         });
 
         Route::group(['prefix' => 'draws'], function() {
-            Route::put('/{draw}/succeeded/{user}', ['as' => 'api.draws.succeeded', 'uses' => 'Api\DrawController@putMarkDrawSucceeded']);
+            Route::put('/{draw}/succeeded/{user?}', ['as' => 'api.draws.succeeded', 'uses' => 'Api\DrawController@putMarkDrawSucceeded']);
         });
 
         Route::group(['prefix' => 'users'], function() {
