@@ -5,6 +5,7 @@ define([
     'controllers/DashboardController',
     'controllers/GroupsController',
     'controllers/GroupsEditController',
+    'services/User',
     'services/GroupsDataService',
     'services/ApplicationPusherService',
     'pusher-angular',
@@ -24,6 +25,7 @@ define([
     wlDashboardController,
     wlGroupsController,
     wlGroupsEditController,
+    wlUser,
     wlGroupsDataService,
     wlApplicationPusherService
 ) {
@@ -55,11 +57,11 @@ define([
         $http.defaults.headers.common['X-CSRF-TOKEN'] = angular.element('head').find('meta[name=csrf_token]')[0].content;
     }])
 
-    .run(['$rootScope', '$auth', '$state', 'Notification', function($rootScope, $auth, $state, Notification) {
+    .run(['$rootScope', '$auth', 'wlUser', '$state', 'Notification', function($rootScope, $auth, wlUser, $state, Notification) {
 
         // Listen to '$locationChangeSuccess', not '$stateChangeStart'
         $rootScope.$on('$stateChangeStart', function(ev, toState, toParams, fromState, fromParams, options) {
-            if (toState.data.needsAuthentication && !$auth.isAuthenticated()) {
+            if (toState.data.needsAuthentication && !wlUser.isAuthenticated()) {
                 ev.preventDefault();
                 Notification.error('Please log in first to see this page');
                 $state.go('public.signin');
@@ -148,6 +150,7 @@ define([
 
     .factory('wlApplicationPusherService', wlApplicationPusherService)
     .factory('wlGroupsDataService', wlGroupsDataService)
+    .factory('wlUser', wlUser)
 
     .controller('wlSignInController', wlSignInController)
     .controller('wlDashboardController', wlDashboardController)

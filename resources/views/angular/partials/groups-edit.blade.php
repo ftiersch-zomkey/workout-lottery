@@ -25,7 +25,7 @@
                 <div class="md-list-item-text">
                     <h3>@{{ user.name }}</h3>
                     <p>Success: <b>122</b> · Fail: <b>22</b></p>
-                    <md-icon md-font-set="material-icons" class="md-secondary" ng-click="removeUserFromGroup(user)" ng-if="(loggedInUser.id == user.id || loggedInUser.id == group.creator_user_id)">remove_circle_outline</md-icon>
+                    <md-icon md-font-set="material-icons" class="md-secondary" ng-click="removeUserFromGroup(user, $event)" ng-if="user.id != group.creator_user_id && (currentUser.id == user.id || currentUser.id == group.creator_user_id)">remove_circle_outline</md-icon>
                 </div>
             </md-list-item>
         </md-list>
