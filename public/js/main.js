@@ -1,49 +1,171 @@
-require.config({
-    baseUrl: 'js/app',
-    paths: {
-        "jquery": '../libs/jquery/dist/jquery',
-        "pusher": '../libs/pusher/dist/pusher',
-        "moment": '../libs/moment/min/moment.min',
-        "pusher-angular": '../libs/pusher-angular/lib/pusher-angular',
-        "angular": '../libs/angular/angular',
-        "angular-ui-router": '../libs/angular-ui-router/release/angular-ui-router',
-        "angular-ui-router-title": '../libs/angular-ui-router-title/angular-ui-router-title',
-        "angular-ui-notification": '../libs/angular-ui-notification/dist/angular-ui-notification.min',
-        "angular-sanitize": '../libs/angular-sanitize/angular-sanitize',
-        "angular-file-upload": '../libs/angular-file-upload/dist/angular-file-upload.min',
-        "angular-storage": "../libs/ngStorage/ngStorage.min",
-        "angular-aria": "../libs/angular-aria/angular-aria.min",
-        "angular-animate": "../libs/angular-animate/angular-animate.min",
-        "angular-material": "../libs/angular-material/angular-material.min",
-        "angular-moment": "../libs/angular-moment/angular-moment.min",
-        "raven-js": "../libs/raven-js/dist/raven.min",
-        "raven-js-angular": "../libs/raven-js/dist/plugins/angular.min",
-        "satellizer" : "../libs/satellizer/satellizer.min"
-    },
-    shim: {
-        jquery: {
-            exports: '$'
-        },
-        angular: {
-            deps: ['jquery'],
-            exports: 'angular'
-        },
-        "angular-sanitize": ['angular'],
-        "angular-ui-router": ['angular'],
-        "angular-ui-notification": ['angular'],
-        "angular-file-upload": ['angular'],
-        "angular-storage": ['angular'],
-        "angular-aria": ['angular'],
-        "angular-animate": ['angular'],
-        "angular-material": ['angular', 'angular-aria', 'angular-animate'],
-        "angular-moment": ['angular', 'moment'],
-        "pusher-angular": ['angular'],
-        "raven-js-angular": ['angular', 'raven-js'],
-        "satellizer": ['angular']
-    }
-});
+jQuery(function($) {
+	"use strict";
+	// Author Code Here
 
-requirejs(['jquery', 'raven-js', 'angular', 'modules/ApplicationModule'], function ($, Raven, angular) {
-    Raven.config('https://8349a55a6f834efba8ce56bd640c272c@app.getsentry.com/67629').install();
-    angular.bootstrap(document, ['wlApplication']);
+	var owlPricing;
+	var ratio = 2;
+
+	// Window Load
+	$(window).load(function() {
+		// Preloader
+		$('.intro-tables, .parallax, header').css('opacity', '0');
+		$('.preloader').addClass('animated fadeOut').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+			$('.preloader').hide();
+			$('.parallax, header').addClass('animated fadeIn').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+				$('.intro-tables').addClass('animated fadeInUp').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend');
+			});
+		});
+
+		// Header Init
+		if ($(window).height() > $(window).width()) {
+			var ratio = $('.parallax').width() / $('.parallax').height();
+			$('.parallax img').css('height', ($(window).height()) + 'px');
+			$('.parallax img').css('width', $('.parallax').height() * ratio + 'px');
+		}
+
+		$('header').height($(window).height() + 80);
+		$('section .cut').each(function() {
+			if ($(this).hasClass('cut-top'))
+				$(this).css('border-right-width', $(this).parent().width() + "px");
+			else if ($(this).hasClass('cut-bottom'))
+				$(this).css('border-left-width', $(this).parent().width() + "px");
+		});
+
+		// Sliders Init
+		$('.owl-schedule').owlCarousel({
+			singleItem: true,
+			pagination: true
+		});
+		$('.owl-testimonials').owlCarousel({
+			singleItem: true,
+			pagination: true
+		});
+		$('.owl-twitter').owlCarousel({
+			singleItem: true,
+			pagination: true
+		});
+
+		// Navbar Init
+		$('nav').addClass('original').clone().insertAfter('nav').addClass('navbar-fixed-top').css('position', 'fixed').css('top', '0').css('margin-top', '0').removeClass('original');
+		$('.mobile-nav ul').html($('nav .navbar-nav').html());
+		$('nav.navbar-fixed-top .navbar-brand img').attr('src', $('nav.navbar-fixed-top .navbar-brand img').data("active-url"));
+
+		// Typing Intro Init
+		$(".typed").typewriter({
+			speed: 60
+		});
+
+		// Popup Form Init
+		var i = 0;
+		var interval = 0.15;
+		$('.popup-form .dropdown-menu li').each(function() {
+			$(this).css('animation-delay', i + "s");
+			i += interval;
+		});
+		$('.popup-form .dropdown-menu li a').click(function(event) {
+			event.preventDefault();
+			$(this).parent().parent().prev('button').html($(this).html());
+		});
+
+		// Onepage Nav
+		$('.navbar.navbar-fixed-top .navbar-nav').onePageNav({
+			currentClass: 'active',
+			changeHash: false,
+			scrollSpeed: 400,
+			filter: ':not(.btn)'
+		});
+	});
+	// Window Scroll
+	function onScroll() {
+		if ($(window).scrollTop() > 50) {
+			$('nav.original').css('opacity', '0');
+			$('nav.navbar-fixed-top').css('opacity', '1');
+		} else {
+			$('nav.original').css('opacity', '1');
+			$('nav.navbar-fixed-top').css('opacity', '0');
+		}
+	}
+
+	window.addEventListener('scroll', onScroll, false);
+
+	// Window Resize
+	$(window).resize(function() {
+		$('header').height($(window).height());
+	});
+
+	// Pricing Box Click Event
+	$('.pricing .box-main').click(function() {
+		$('.pricing .box-main').removeClass('active');
+		$('.pricing .box-second').removeClass('active');
+		$(this).addClass('active');
+		$(this).next($('.box-second')).addClass('active');
+		$('#pricing').css("background-image", "url(" + $(this).data('img') + ")");
+		$('#pricing').css("background-size", "cover");
+	});
+
+	// Mobile Nav
+	$('body').on('click', 'nav .navbar-toggle', function() {
+		event.stopPropagation();
+		$('.mobile-nav').addClass('active');
+	});
+
+	$('body').on('click', '.mobile-nav a', function(event) {
+		$('.mobile-nav').removeClass('active');
+		if(!this.hash) return;
+		event.preventDefault();
+		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+			event.stopPropagation();
+			var target = $(this.hash);
+			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+			if (target.length) {
+				$('html,body').animate({
+					scrollTop: target.offset().top
+				}, 1000);
+				return false;
+			}
+		}
+	});
+
+	$('body').on('click', '.mobile-nav a.close-link', function(event) {
+		$('.mobile-nav').removeClass('active');
+		event.preventDefault();
+	});
+
+	$('body').on('click', 'nav.original .navbar-nav a:not([data-toggle])', function() {
+		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+			event.stopPropagation();
+			var target = $(this.hash);
+			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+			if (target.length) {
+				$('html,body').animate({
+					scrollTop: target.offset().top
+				}, 1000);
+				return false;
+			}
+		}
+	});
+
+	function centerModal() {
+		$(this).css('display', 'block');
+		var $dialog = $(this).find(".modal-dialog"),
+			offset = ($(window).height() - $dialog.height()) / 2,
+			bottomMargin = parseInt($dialog.css('marginBottom'), 10);
+
+		// Make sure you don't hide the top part of the modal w/ a negative margin
+		// if it's longer than the screen height, and keep the margin equal to 
+		// the bottom margin of the modal
+		if (offset < bottomMargin) offset = bottomMargin;
+		$dialog.css("margin-top", offset);
+	}
+
+	$('.modal').on('show.bs.modal', centerModal);
+
+	$('.modal-popup .close-link').click(function(event){
+		event.preventDefault();
+		$('#modal1').modal('hide');
+	});
+
+	$(window).on("resize", function() {
+		$('.modal:visible').each(centerModal);
+	});
 });

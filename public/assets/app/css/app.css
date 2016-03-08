@@ -1,0 +1,9 @@
+button.md-fab.md-floating-fab {
+  position: fixed;
+  z-index: 30;
+  margin: 25px; }
+  button.md-fab.md-floating-fab.md-floating-fab-br {
+    bottom: 0px;
+    right: 0px; }
+
+/*# sourceMappingURL=app.css.map */

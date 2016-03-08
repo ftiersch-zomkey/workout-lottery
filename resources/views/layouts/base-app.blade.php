@@ -6,12 +6,12 @@
 
         <title>Workout-Lottery - Let's get movin'</title>
 
-        <script type="text/javascript" data-main="js/main" src="{{ asset('js/libs/requirejs/require.js') }}"></script>
+        <script type="text/javascript" data-main="assets/app/js/main" src="{{ asset('assets/app/js/libs/requirejs/require.js') }}"></script>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="{{ asset('js/libs/angular-material/angular-material.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('js/libs/angular-ui-notification/dist/angular-ui-notification.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/app/js/libs/angular-material/angular-material.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/app/js/libs/angular-ui-notification/dist/angular-ui-notification.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/app/css/app.css') }}" />
     </head>
     <body layout="column">
         @yield('content')
